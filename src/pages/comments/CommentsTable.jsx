@@ -27,7 +27,7 @@ const CommentsTable = () => {
                 <div className="form-check form-switch d-flex justify-content-center align-items-center p-0 h-100">
                   <label
                     className="form-check-label pointer"
-                    for="flexSwitchCheckDefault"
+                    htmlFor="flexSwitchCheckDefault"
                   >
                     فعال
                   </label>

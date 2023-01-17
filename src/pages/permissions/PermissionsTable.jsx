@@ -21,7 +21,7 @@ const PermissionsTable = () => {
               <div className="form-check form-switch d-flex justify-content-center align-items-center p-0 h-100">
                 <label
                   className="form-check-label pointer"
-                  for="flexSwitchCheckDefault"
+                  htmlFor="flexSwitchCheckDefault"
                 >
                   فعال
                 </label>
@@ -29,7 +29,6 @@ const PermissionsTable = () => {
                   className="form-check-input pointer mx-3"
                   type="checkbox"
                   id="flexSwitchCheckDefault"
-                  checked
                 />
               </div>
             </td>
