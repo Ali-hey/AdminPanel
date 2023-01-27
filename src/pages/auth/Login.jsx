@@ -2,10 +2,8 @@ import React from "react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import AuthFormikControl from "../../components/authForm/AuthFormikControl";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Alert } from "../../utils/alerts";
-import httpService from "../../services/httpService";
 import { loginService } from "../../services/auth";
 
 const initialValues = {

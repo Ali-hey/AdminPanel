@@ -2,8 +2,14 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 
-
-const PaginatedTable = ({ children, data, dataInfo, additionField, numOfPage, searchParams }) => {
+const PaginatedTable = ({
+  children,
+  data,
+  dataInfo,
+  additionField,
+  numOfPage,
+  searchParams,
+}) => {
   const [tableData, setTableData] = useState([]);
   const [initData, setInitData] = useState(data);
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,9 +35,11 @@ const PaginatedTable = ({ children, data, dataInfo, additionField, numOfPage, se
 
   // to handle search Box
   useEffect(() => {
-    setInitData(data.filter((d) => d[searchParams.searchField].includes(searchChar)));
-    setCurrentPage(1)
-  }, [searchChar]);
+    setInitData(
+      data.filter((d) => d[searchParams.searchField].includes(searchChar))
+    );
+    setCurrentPage(1);
+  }, [searchChar, data]);
 
   return (
     <>
@@ -57,7 +65,12 @@ const PaginatedTable = ({ children, data, dataInfo, additionField, numOfPage, se
             {dataInfo.map((i) => (
               <th key={i.field}>{i.title}</th>
             ))}
-            {additionField ? <th>{additionField.title}</th> : null}
+
+            {additionField
+              ? additionField.map((a, index) => (
+                  <th key={a.id + "__" + index}>{a.title}</th>
+                ))
+              : null}
           </tr>
         </thead>
         <tbody>
@@ -66,55 +79,61 @@ const PaginatedTable = ({ children, data, dataInfo, additionField, numOfPage, se
               {dataInfo.map((i) => (
                 <td key={i.field + "_" + d.id}>{d[i.field]}</td>
               ))}
-              {additionField ? <th>{additionField.elements(d.id)}</th> : null}
+
+              {additionField
+                ? additionField.map((a, index) => (
+                    <td key={a.id + "___" + index}>{a.elements(d)}</td>
+                  ))
+                : null}
             </tr>
           ))}
         </tbody>
       </table>
-      {pages.length>1?<nav
-        aria-label="Page navigation example"
-        className="d-flex justify-content-center"
-      >
-        <ul className="pagination dir_ltr">
-          <li className="page-item">
-            <span
-              className={`page-link pointer ${
-                currentPage == 1 ? "disabled" : ""
-              }`}
-              aria-label="Previous"
-              onClick={() => setCurrentPage(currentPage - 1)}
-            >
-              <span aria-hidden="true">&raquo;</span>
-            </span>
-          </li>
-
-          {pages.map((page) => (
-            <li className="page-item" key={page}>
+      {pages.length > 1 ? (
+        <nav
+          aria-label="Page navigation example"
+          className="d-flex justify-content-center"
+        >
+          <ul className="pagination dir_ltr">
+            <li className="page-item">
               <span
                 className={`page-link pointer ${
-                  currentPage == page ? "alert-success" : ""
+                  currentPage == 1 ? "disabled" : ""
                 }`}
-                onClick={() => setCurrentPage(page)}
+                aria-label="Previous"
+                onClick={() => setCurrentPage(currentPage - 1)}
               >
-                {page}
+                <span aria-hidden="true">&raquo;</span>
               </span>
             </li>
-          ))}
 
-          <li className="page-item">
-            <span
-              className={`page-link pointer ${
-                currentPage == pageCount ? "disabled" : ""
-              }`}
-              aria-label="Next"
-              onClick={() => setCurrentPage(currentPage + 1)}
-            >
-              <span aria-hidden="true">&laquo;</span>
-            </span>
-          </li>
-        </ul>
-      </nav>:null}
-      
+            {pages.map((page) => (
+              <li className="page-item" key={page}>
+                <span
+                  className={`page-link pointer ${
+                    currentPage == page ? "alert-success" : ""
+                  }`}
+                  onClick={() => setCurrentPage(page)}
+                >
+                  {page}
+                </span>
+              </li>
+            ))}
+
+            <li className="page-item">
+              <span
+                className={`page-link pointer ${
+                  currentPage == pageCount ? "disabled" : ""
+                }`}
+                aria-label="Next"
+                onClick={() => setCurrentPage(currentPage + 1)}
+              >
+                <span aria-hidden="true">&laquo;</span>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      ) : null}
     </>
   );
 };
