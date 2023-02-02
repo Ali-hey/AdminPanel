@@ -9,7 +9,7 @@ const Textarea = ({name, label, className, placeholder}) => {
                 <FastField as="textarea" name={name} className="form-control" placeholder={placeholder} />
                 <span className="input-group-text w_6rem justify-content-center"> {label} </span>
             </div>
-            {/* <ErrorMessage name={name} component={FormikError}/> */}
+            <ErrorMessage name={name} component={FormikError}/>
         </div>
     );
 }

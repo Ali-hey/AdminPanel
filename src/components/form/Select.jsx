@@ -14,7 +14,7 @@ const Select = ({options, name, label, className}) => {
                 </FastField>
                 <span className="input-group-text w_6rem justify-content-center">{label}</span>
             </div>
-            {/* <ErrorMessage name={name} component={FormikError}/> */}
+            <ErrorMessage name={name} component={FormikError}/>
         </div>
   );
 };

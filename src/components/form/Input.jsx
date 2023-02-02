@@ -9,7 +9,7 @@ const Input = ({type, name, label, className, placeholder}) => {
                 <FastField type={type} name={name} className="form-control" placeholder={placeholder} />
                 <span className="input-group-text w_6rem justify-content-center"> {label} </span>
             </div>
-            {/* <ErrorMessage name={name} component={FormikError}/> */}
+            <ErrorMessage name={name} component={FormikError}/>
         </div>
     );
 }
