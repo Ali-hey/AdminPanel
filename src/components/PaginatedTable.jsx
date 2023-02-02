@@ -1,46 +1,36 @@
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-
+import React, { useEffect, useState } from "react";
 const PaginatedTable = ({
   children,
   data,
   dataInfo,
   additionField,
-  numOfPage,
+  numOfPAge,
   searchParams,
 }) => {
+  const [initData, setIninData] = useState(data);
   const [tableData, setTableData] = useState([]);
-  const [initData, setInitData] = useState(data);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(2);
   const [pages, setPages] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [searchChar, setSearchChar] = useState("");
-
-  // to handle count of numbers
   useEffect(() => {
-    let pCount = Math.ceil(initData.length / numOfPage);
+    let pCount = Math.ceil(initData.length / numOfPAge);
     setPageCount(pCount);
     let pArr = [];
     for (let i = 1; i <= pCount; i++) pArr = [...pArr, i];
     setPages(pArr);
   }, [initData]);
-
-  // to handle count of datas in table
   useEffect(() => {
-    let start = currentPage * numOfPage - numOfPage; //0
-    let end = currentPage * numOfPage; //2
+    let start = currentPage * numOfPAge - numOfPAge; // 0
+    let end = currentPage * numOfPAge; // 2
     setTableData(initData.slice(start, end));
   }, [currentPage, initData]);
-
-  // to handle search Box
   useEffect(() => {
-    setInitData(
+    setIninData(
       data.filter((d) => d[searchParams.searchField].includes(searchChar))
     );
     setCurrentPage(1);
   }, [searchChar, data]);
-
   return (
     <>
       <div className="row justify-content-between">
@@ -65,7 +55,6 @@ const PaginatedTable = ({
             {dataInfo.map((i) => (
               <th key={i.field}>{i.title}</th>
             ))}
-
             {additionField
               ? additionField.map((a, index) => (
                   <th key={a.id + "__" + index}>{a.title}</th>
@@ -79,7 +68,6 @@ const PaginatedTable = ({
               {dataInfo.map((i) => (
                 <td key={i.field + "_" + d.id}>{d[i.field]}</td>
               ))}
-
               {additionField
                 ? additionField.map((a, index) => (
                     <td key={a.id + "___" + index}>{a.elements(d)}</td>
@@ -106,7 +94,6 @@ const PaginatedTable = ({
                 <span aria-hidden="true">&raquo;</span>
               </span>
             </li>
-
             {pages.map((page) => (
               <li className="page-item" key={page}>
                 <span
@@ -119,7 +106,6 @@ const PaginatedTable = ({
                 </span>
               </li>
             ))}
-
             <li className="page-item">
               <span
                 className={`page-link pointer ${
@@ -137,5 +123,4 @@ const PaginatedTable = ({
     </>
   );
 };
-
 export default PaginatedTable;

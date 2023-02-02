@@ -5,6 +5,7 @@ import Logout from "./auth/Logout";
 import Brands from "./brands/Brands";
 import Carts from "./carts/Carts";
 import Category from "./category/Category";
+import CategoryChildren from "./category/CategoryChildren";
 import Colors from "./colors/Colors";
 import Comments from "./comments/Comments";
 import Dashboard from "./dashboard/Dashboard";
@@ -29,7 +30,7 @@ const Content = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Product />} />
         <Route path="/categories" element={<Category />} >
-          <Route path=":categoryId"/>
+          <Route path=":categoryId" element={<CategoryChildren/>}/>
         </Route>
         <Route path="/colors" element={<Colors />} />
         <Route path="/guaranties" element={<Guaranties />} />
