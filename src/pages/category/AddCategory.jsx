@@ -8,6 +8,8 @@ import {
   getCategoriesService,
 } from "../../services/category";
 import { Alert } from "../../utils/alerts";
+import SubmitButton from "../../components/form/SubmitButton";
+import { useParams } from "react-router-dom";
 
 const initialValues = {
   parent_id: "",
@@ -18,7 +20,7 @@ const initialValues = {
   show_in_menu: true,
 };
 
-const onSubmit = async (values, actions,setForceRender) => {
+const onSubmit = async (values, actions, setForceRender) => {
   try {
     values = {
       ...values,
@@ -29,7 +31,7 @@ const onSubmit = async (values, actions,setForceRender) => {
     if (res.status == 201) {
       Alert("رکورد ثبت شد", res.data.message, "success");
       actions.resetForm();
-      setForceRender(last=>last+1);
+      setForceRender((last) => last + 1);
     }
   } catch (error) {
     console.log(error);
@@ -61,7 +63,10 @@ const validationSchema = Yup.object({
 });
 
 const AddCategory = ({ setForceRender }) => {
+  const params = useParams();
   const [parents, setParents] = useState([]);
+  const [reInitialValues, setReInitialValues] = useState(null);
+
   const handleGetParentsCategories = async () => {
     try {
       const res = await getCategoriesService();
@@ -81,6 +86,17 @@ const AddCategory = ({ setForceRender }) => {
   useEffect(() => {
     handleGetParentsCategories();
   }, []);
+
+  useEffect(() => {
+    if (params.categoryId) {
+      setReInitialValues({
+        ...initialValues,
+        parent_id: params.categoryId,
+      });
+    } else {
+      setReInitialValues(null);
+    }
+  }, [params.categoryId]);
   return (
     <>
       <button
@@ -97,11 +113,12 @@ const AddCategory = ({ setForceRender }) => {
         title="افزودن دسته محصولات"
       >
         <Formik
-          initialValues={initialValues}
+          initialValues={reInitialValues || initialValues}
           onSubmit={(values, actions) =>
             onSubmit(values, actions, setForceRender)
           }
           validationSchema={validationSchema}
+          enableReinitialize
         >
           <Form>
             <div className="container">
@@ -156,9 +173,7 @@ const AddCategory = ({ setForceRender }) => {
                   </div>
                 </div>
                 <div className="btn_box text-center col-12 col-md-6 col-lg-8 mt-4">
-                  <button type="submit" className="btn btn-primary ">
-                    ذخیره
-                  </button>
+                  <SubmitButton />
                 </div>
               </div>
             </div>
