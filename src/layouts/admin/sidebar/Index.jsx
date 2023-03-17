@@ -10,7 +10,7 @@ const Index = () => {
     <section id="sidebar_section">
       <div className={`mini_sidebar collapsedd bg-dark h-100 ${showSidebar ? "expanded" : null}`}>
         <div className="p-0 m-0">
-          <Avatar name="قاسم بساکی" imagePath="/assets/images/avatar/user2.jpg"/>
+          <Avatar name="علی حیرت انگیز" imagePath="/assets/images/avatar/user1.jpg"/>
           <SidebarItem targetPath="/" icon="fas fa-tachometer-alt" title="داشبورد"/>
           {/* <!-- =================================== --> */}
           <SidebarGroupTitle title="فروشگاه"/>
