@@ -15,7 +15,7 @@ const Leftcontent = () => {
         aria-labelledby="dropdownMenuButton1"
       >
         <li className="my-2">
-          <a className="dropdown-item d-block text-center">قاسم بساکی</a>
+          <a className="dropdown-item d-block text-center">علی حیرت انگیز</a>
         </li>
         <li className="my-2 d-flex justify-content-center align-items-center px-2">
           <i className="fas fa-tachometer-alt"></i>

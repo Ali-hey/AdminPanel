@@ -4,7 +4,7 @@ import { AdminContext } from "../context/adminLayoutContext";
 import Logout from "./auth/Logout";
 import Brands from "./brands/Brands";
 import Carts from "./carts/Carts";
-import AddAttributes from "./category/attrs/AddAttributes";
+import Attributes from "./category/attrs/Attributes";
 import Category from "./category/Category";
 import CategoryChildren from "./category/CategoryChildren";
 import Colors from "./colors/Colors";
@@ -33,7 +33,7 @@ const Content = () => {
         <Route path="/categories" element={<Category />}>
           <Route path=":categoryId" element={<CategoryChildren />} />
         </Route>
-        <Route path="/categories/:categoryId/attributes" element={<AddAttributes />} />
+        <Route path="/categories/:categoryId/attributes" element={<Attributes />} />
         <Route path="/colors" element={<Colors />} />
         <Route path="/guaranties" element={<Guaranties />} />
         <Route path="/brands" element={<Brands />} />

@@ -441,3 +441,10 @@ th {
 }
 
 /* content end-------<<<<<<< */
+.danger_shadow {
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+
+.is_inline .input-group {
+  margin: 0 !important;
+}

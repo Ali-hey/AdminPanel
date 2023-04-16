@@ -9,7 +9,7 @@ const SubmitButton = () => {
         return (
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn btn-primary btn-sm"
             disabled={form.isSubmitting}
           >
             {form.isSubmitting ? "لطفا صبر کنید" : "ذخیره"}
