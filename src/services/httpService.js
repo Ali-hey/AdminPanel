@@ -36,4 +36,5 @@ const httpService = (url, method, data = null) => {
     },
   });
 };
+
 export default httpService;
