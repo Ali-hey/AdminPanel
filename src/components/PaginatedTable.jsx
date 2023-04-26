@@ -16,6 +16,7 @@ const PaginatedTable = ({
   const [pages, setPages] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [searchChar, setSearchChar] = useState("");
+
   useEffect(() => {
     let pCount = Math.ceil(initData.length / numOfPAge);
     setPageCount(pCount);
@@ -23,17 +24,20 @@ const PaginatedTable = ({
     for (let i = 1; i <= pCount; i++) pArr = [...pArr, i];
     setPages(pArr);
   }, [initData]);
+
   useEffect(() => {
     let start = currentPage * numOfPAge - numOfPAge; // 0
     let end = currentPage * numOfPAge; // 2
     setTableData(initData.slice(start, end));
   }, [currentPage, initData]);
+
   useEffect(() => {
     setIninData(
       data.filter((d) => d[searchParams.searchField].includes(searchChar))
     );
     setCurrentPage(1);
   }, [searchChar, data]);
+  
   return (
     <>
       <div className="row justify-content-between">
