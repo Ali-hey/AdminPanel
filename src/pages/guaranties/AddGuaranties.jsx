@@ -19,6 +19,7 @@ const AddGuaranty = ({ setData, guaranteeToEdit, setGuaranteeToEdit }) => {
       });
     else setReInitValues(null);
   }, [guaranteeToEdit]);
+  
   return (
     <>
       <button
