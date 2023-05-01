@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
-import AddProduct from "./AddProduct";
 import PaginatedDataTable from "../../components/PaginatedDataTable";
-import { getProductsService } from "../../services/products";
+import {
+  deleteProductService,
+  getProductsService,
+} from "../../services/products";
 import Actions from "./tableAddition/Actions";
+import { Alert, Confirm } from "../../utils/alerts";
+import { Link } from "react-router-dom";
 
 const TableProduct = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchChar, setSearchChar] = useState("");
   const [currentPage, setCurrentPage] = useState(1); // current page
-  const [countOnPage, setCountOnPage] = useState(5); // product counts on each page
+  const [countOnPage, setCountOnPage] = useState(8); // product counts on each page
   const [pageCount, setPageCount] = useState(0); // count of all pages
 
   const dataInfo = [
@@ -25,7 +29,9 @@ const TableProduct = () => {
     {
       field: null,
       title: "عملیات",
-      elements: (rowData) => <Actions rowData={rowData} />,
+      elements: (rowData) => (
+        <Actions rowData={rowData} handleDeleteProduct={handleDeleteProduct} />
+      ),
     },
   ];
   const searchParams = {
@@ -48,6 +54,16 @@ const TableProduct = () => {
     handleGetProducts(1, countOnPage, char);
   };
 
+  const handleDeleteProduct = async (product) => {
+    if (await Confirm(`آیا از حذف ${product.title} اطمینان دارید؟`)) {
+      const res = await deleteProductService(product.id);
+      if (res.status === 200) {
+        Alert("انجام شد", res.data.message, "success");
+        handleGetProducts(currentPage, countOnPage, searchChar);
+      }
+    }
+  };
+
   useEffect(() => {
     handleGetProducts(currentPage, countOnPage, searchChar);
   }, [currentPage]);
@@ -63,7 +79,11 @@ const TableProduct = () => {
       pageCount={pageCount}
       handleSearch={handleSearch}
     >
-      <AddProduct />
+      <Link to="/products/add-product">
+        <span className="btn btn-success d-flex justfiy-content-center align-items-center">
+          <i className="fas fa-plus text-light"></i>
+        </span>
+      </Link>
     </PaginatedDataTable>
   );
 };

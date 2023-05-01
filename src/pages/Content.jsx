@@ -19,6 +19,7 @@ import Product from "./product/Product";
 import Questions from "./questions/Questions";
 import Roles from "./roles/Roles";
 import Users from "./users/Users";
+import AddProduct from "./product/AddProduct";
 
 const Content = () => {
   const { showSidebar } = useContext(AdminContext);
@@ -30,6 +31,7 @@ const Content = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Product />} />
+        <Route path="/products/add-product" element={<AddProduct />} />
         <Route path="/categories" element={<Category />}>
           <Route path=":categoryId" element={<CategoryChildren />} />
         </Route>

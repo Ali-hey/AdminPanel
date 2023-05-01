@@ -1,23 +1,21 @@
 import React from "react";
-import { createPortal } from "react-dom";
-import ModalsContainer from "../../components/ModalsContainer";
+import { Formik } from "formik";
+import { Form } from "react-router-dom";
+import { initialValues, onSubmit, validationSchema } from "./core";
 
 const AddProduct = () => {
   return (
-    <>
-      <button
-        className="btn btn-success d-flex justify-content-center align-items-center"
-        data-bs-toggle="modal"
-        data-bs-target="#add_product_modal"
-      >
-        <i className="fas fa-plus text-light"></i>
-      </button>
-      <ModalsContainer
-        fullScreen={true}
-        id="add_product_modal"
-        title="افزودن محصول جدید"
-      >
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values, actions) => {
+        onSubmit(values, actions);
+      }}
+      validationSchema={validationSchema}
+    >
+      <Form>
         <div className="container">
+          <h4 className="text-center my-3">افزودن محصول جدید</h4>
+
           <div className="row justify-content-center">
             <div className="col-12 col-md-6 col-lg-8">
               <div className="input-group mb-2 dir_ltr">
@@ -244,8 +242,8 @@ const AddProduct = () => {
             </div>
           </div>
         </div>
-      </ModalsContainer>
-    </>
+      </Form>
+    </Formik>
   );
 };
 

@@ -37,7 +37,9 @@ const PaginatedTable = ({
     );
     setCurrentPage(1);
   }, [searchChar, data]);
-  
+
+  const pageRange = 3;
+
   return (
     <>
       <div className="row justify-content-between">
@@ -108,18 +110,49 @@ const PaginatedTable = ({
                 <span aria-hidden="true">&raquo;</span>
               </span>
             </li>
-            {pages.map((page) => (
-              <li className="page-item" key={page}>
+
+            {currentPage > pageRange ? (
+              <li className="page-item me-2">
                 <span
-                  className={`page-link pointer ${
-                    currentPage == page ? "alert-success" : ""
-                  }`}
-                  onClick={() => setCurrentPage(page)}
+                  className="page-link pointer"
+                  onClick={() => {
+                    setCurrentPage(1);
+                  }}
                 >
-                  {page}
+                  1
                 </span>
               </li>
-            ))}
+            ) : null}
+
+            {pages.map((page) => {
+              return page < currentPage + pageRange &&
+                page > currentPage - pageRange ? (
+                <li className="page-item" key={page}>
+                  <span
+                    className={`page-link pointer ${
+                      currentPage == page ? "alert-success" : ""
+                    }`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </span>
+                </li>
+              ) : null;
+            })}
+
+            {currentPage <= pageCount - pageRange ? (
+              <li className="page-item ms-2">
+                <span
+                  className="page-link pointer"
+                  onClick={() => {
+                    setCurrentPage(pageCount);
+                  }}
+                >
+                  {pageCount}
+                </span>
+              </li>
+            ) : null}
+
             <li className="page-item">
               <span
                 className={`page-link pointer ${
