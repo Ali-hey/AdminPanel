@@ -80,9 +80,9 @@ const TableProduct = () => {
       handleSearch={handleSearch}
     >
       <Link to="/products/add-product">
-        <span className="btn btn-success d-flex justfiy-content-center align-items-center">
-          <i className="fas fa-plus text-light"></i>
-        </span>
+          <span className="btn btn-success d-flex justify-content-center align-items-center">
+              <i className="fas fa-plus text-light"></i>
+          </span>
       </Link>
     </PaginatedDataTable>
   );
