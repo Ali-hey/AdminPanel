@@ -2,7 +2,7 @@ import { ErrorMessage, FastField } from "formik";
 import React from "react";
 import FormikError from "./FormikError";
 
-const File = (placeholder, className, label, name) => {
+const File = ({ placeholder, className, label, name }) => {
   return (
     <FastField>
       {({ form }) => {
@@ -14,12 +14,12 @@ const File = (placeholder, className, label, name) => {
                 name={name}
                 className="form-control"
                 placeholder={placeholder}
-                onChange={(e)=>form.setFieldValue(name,e.target.files[0])}
+                onChange={(e) => form.setFieldValue(name, e.target.files[0])}
               />
               <span className="input-group-text w_6rem justify-content-center">
                 {label}
               </span>
-              {/* <ErrorMessage name={name} component={FormikError}/> */}
+              <ErrorMessage name={name} component={FormikError} />
             </div>
           </div>
         );
