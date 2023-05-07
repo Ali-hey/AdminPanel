@@ -1,16 +1,26 @@
-import React, { useEffect, useState } from "react";
 import { Form, Formik } from "formik";
-import { initialValues, onSubmit, validationSchema } from "./core";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import FormikControl from "../../components/form/FormikControl";
-import { getCategoriesService } from "../../services/category";
+import SubmitButton from "../../components/form/SubmitButton";
 import PrevPageButton from "../../components/PrevPageButton";
 import SpinnerLoad from "../../components/SpinnerLoad";
-import SubmitButton from "../../components/form/SubmitButton";
 import { getAllBrandsService } from "../../services/brands";
+import { getCategoriesService } from "../../services/category";
 import { getAllColorsService } from "../../services/color";
 import { getAllGuaranteesService } from "../../services/guarantees";
+import { initialValues, onSubmit, validationSchema } from "./core";
 
 const AddProduct = () => {
+  const location = useLocation();
+  const productToEdit = location.state?.productToEdit;
+  const [reInitialValues, setReInitialValues] = useState(null);
+
+  const [selectedCategories, setSelectedCategories] = useState([]); // used in editting
+  const [selectedColors, setSelectedColors] = useState([]); // used in editting
+  const [selectedGuarantees, setSelectedGuarantees] = useState([]); // used in editting
+
   const [parentCategories, setparentCategories] = useState([]);
   const [mainCategories, setMainCategories] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -27,11 +37,6 @@ const AddProduct = () => {
       );
     }
   };
-
-  useEffect(() => {
-    getAllParentCategories();
-  }, []);
-
   const getAllBrands = async () => {
     const res = await getAllBrandsService();
     if (res.status === 200) {
@@ -62,11 +67,42 @@ const AddProduct = () => {
       );
     }
   };
+  const setInitialSelectedValues = () => {
+    if (productToEdit) {
+      setSelectedCategories(
+        productToEdit.categories.map((c) => {
+          return { id: c.id, value: c.title };
+        })
+      );
+      setSelectedColors(
+        productToEdit.colors.map((c) => {
+          return { id: c.id, value: c.title };
+        })
+      );
+      setSelectedGuarantees(
+        productToEdit.guarantees.map((c) => {
+          return { id: c.id, value: c.title };
+        })
+      );
+    }
+  };
   useEffect(() => {
     getAllParentCategories();
     getAllBrands();
     getAllColors();
     getAllGuarantees();
+    setInitialSelectedValues();
+    for (const key in productToEdit) {
+      if (productToEdit[key] === null) productToEdit[key] = "";
+    }
+    if (productToEdit)
+      setReInitialValues({
+        ...productToEdit,
+        category_ids: productToEdit.categories.map((c) => c.id).join("-"),
+        color_ids: productToEdit.colors.map((c) => c.id).join("-"),
+        guarantee_ids: productToEdit.guarantees.map((g) => g.id).join("-"),
+      });
+    else setReInitialValues(null);
   }, []);
 
   const handleSetMainCategories = async (value) => {
@@ -87,27 +123,36 @@ const AddProduct = () => {
 
   return (
     <Formik
-      initialValues={initialValues}
-      onSubmit={(values, actions) => onSubmit(values, actions)}
+      initialValues={reInitialValues || initialValues}
+      onSubmit={(values, actions) => onSubmit(values, actions, productToEdit)}
       validationSchema={validationSchema}
+      enableReinitialize
     >
       {(formik) => {
         return (
           <Form>
-            <div className="container">
-              <h4 className="text-center my-3">افزودن محصول جدید</h4>
+            <div className="container mb-5">
+              <h4 className="text-center my-3">
+                {productToEdit ? (
+                  <>
+                    ویرایش محصول :
+                    <span className="text-primary">{productToEdit.title}</span>
+                  </>
+                ) : (
+                  "افزودن محصول جدید"
+                )}
+              </h4>
               <div className="text-left col-md-6 col-lg-8 m-auto my-3">
                 <PrevPageButton />
               </div>
-
               <div className="row justify-content-center">
                 <FormikControl
+                  label="دسته والد *"
                   className="col-md-6 col-lg-8"
                   control="select"
                   options={parentCategories}
                   name="parentCats"
-                  label="دسته والد*"
-                  firstItem="دسته مورد نظر را انتخاب کنید..."
+                  firstItem="دسته مورد نظر را انتخاب کنبد..."
                   handleOnchange={handleSetMainCategories}
                 />
 
@@ -116,25 +161,27 @@ const AddProduct = () => {
                 ) : null}
 
                 <FormikControl
+                  label="دسته اصلی *"
                   className="col-md-6 col-lg-8"
                   control="searchableSelect"
                   options={
                     typeof mainCategories == "object" ? mainCategories : []
                   }
                   name="category_ids"
-                  label="دسته اصلی*"
-                  firstItem="دسته مورد نظر را انتخاب کنید..."
+                  firstItem="دسته مورد نظر را انتخاب کنبد..."
                   resultType="string"
+                  initialItems={selectedCategories}
                 />
 
                 <FormikControl
-                  label="عنوان*"
+                  label="عنوان *"
                   className="col-md-6 col-lg-8"
                   control="input"
                   type="text"
                   name="title"
-                  placeholder="فقط از اعداد و حروف استفاده کنید..."
+                  placeholder="فقط از حروف و اعداد استفاده کنید"
                 />
+
                 <FormikControl
                   label="قیمت *"
                   className="col-md-6 col-lg-8"
@@ -143,6 +190,7 @@ const AddProduct = () => {
                   name="price"
                   placeholder="فقط از اعداد استفاده کنید(تومان)"
                 />
+
                 <FormikControl
                   label="وزن "
                   className="col-md-6 col-lg-8"
@@ -151,6 +199,7 @@ const AddProduct = () => {
                   name="weight"
                   placeholder="فقط از اعداد استفاده کنید(گِرم)"
                 />
+
                 <FormikControl
                   label="برند"
                   className="col-md-6 col-lg-8"
@@ -168,7 +217,9 @@ const AddProduct = () => {
                   name="color_ids"
                   firstItem="رنگ مورد نظر را انتخاب کنبد..."
                   resultType="string"
+                  initialItems={selectedColors}
                 />
+
                 <FormikControl
                   label="گارانتی"
                   className="col-md-6 col-lg-8"
@@ -177,7 +228,9 @@ const AddProduct = () => {
                   name="guarantee_ids"
                   firstItem="گارانتی مورد نظر را انتخاب کنبد..."
                   resultType="string"
+                  initialItems={selectedGuarantees}
                 />
+
                 <FormikControl
                   label="توضیحات"
                   className="col-md-6 col-lg-8"
@@ -185,6 +238,7 @@ const AddProduct = () => {
                   name="descriptions"
                   placeholder="فقط از حروف واعداد استفاده شود"
                 />
+
                 <FormikControl
                   label="توضیحات کوتاه"
                   className="col-md-6 col-lg-8"
@@ -201,13 +255,15 @@ const AddProduct = () => {
                   placeholder="فقط از حروف واعداد استفاده شود"
                 />
 
-                <FormikControl
-                  label="تصویر"
-                  className="col-md-6 col-lg-8"
-                  control="file"
-                  name="image"
-                  placeholder="تصویر"
-                />
+                {!productToEdit ? (
+                  <FormikControl
+                    label="تصویر"
+                    className="col-md-6 col-lg-8"
+                    control="file"
+                    name="image"
+                    placeholder="تصویر"
+                  />
+                ) : null}
 
                 <FormikControl
                   label="توضیح تصویر "
@@ -235,6 +291,7 @@ const AddProduct = () => {
                   name="stock"
                   placeholder="فقط از اعداد استفاده کنید(عدد)"
                 />
+
                 <FormikControl
                   label="درصد تخفیف "
                   className="col-md-6 col-lg-8"

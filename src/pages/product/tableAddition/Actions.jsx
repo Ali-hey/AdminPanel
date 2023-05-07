@@ -1,13 +1,17 @@
 import React from "react";
-const Actions = ({ rowData, handleDeleteProduct}) => {
+import { useNavigate } from "react-router-dom";
+const Actions = ({ rowData, handleDeleteProduct }) => {
+  const navigation = useNavigate();
   return (
     <>
       <i
-        className="fas fa-edit text-warning mx-1 hoverable_text pointer has_tooltip"
+        className="fas fa-edit text-warning mx-1 hoverable_text pointer"
         title="ویرایش محصول"
-        data-bs-toggle="modal"
-        data-bs-placement="top"
-        data-bs-target="#add_product_modal"
+        onClick={() =>
+          navigation("/products/add-product", {
+            state: { productToEdit: rowData },
+          })
+        }
       ></i>
       <i
         className="fas fa-receipt text-info mx-1 hoverable_text pointer has_tooltip"
@@ -20,7 +24,7 @@ const Actions = ({ rowData, handleDeleteProduct}) => {
         title="حذف محصول"
         data-bs-toggle="tooltip"
         data-bs-placement="top"
-        onClick={()=>{handleDeleteProduct(rowData)}}
+        onClick={() => handleDeleteProduct(rowData)}
       ></i>
     </>
   );
