@@ -37,6 +37,7 @@ const AddProduct = () => {
       );
     }
   };
+
   const getAllBrands = async () => {
     const res = await getAllBrandsService();
     if (res.status === 200) {
@@ -47,6 +48,7 @@ const AddProduct = () => {
       );
     }
   };
+
   const getAllColors = async () => {
     const res = await getAllColorsService();
     if (res.status === 200) {
@@ -57,6 +59,7 @@ const AddProduct = () => {
       );
     }
   };
+
   const getAllGuarantees = async () => {
     const res = await getAllGuaranteesService();
     if (res.status === 200) {
@@ -67,6 +70,7 @@ const AddProduct = () => {
       );
     }
   };
+
   const setInitialSelectedValues = () => {
     if (productToEdit) {
       setSelectedCategories(
@@ -86,6 +90,7 @@ const AddProduct = () => {
       );
     }
   };
+
   useEffect(() => {
     getAllParentCategories();
     getAllBrands();
@@ -135,8 +140,8 @@ const AddProduct = () => {
               <h4 className="text-center my-3">
                 {productToEdit ? (
                   <>
-                    ویرایش محصول :
-                    <span className="text-primary">{productToEdit.title}</span>
+                    ویرایش محصول : 
+                    <span className="text-primary"> {productToEdit.title}</span>
                   </>
                 ) : (
                   "افزودن محصول جدید"
@@ -152,7 +157,7 @@ const AddProduct = () => {
                   control="select"
                   options={parentCategories}
                   name="parentCats"
-                  firstItem="دسته مورد نظر را انتخاب کنبد..."
+                  firstItem="دسته مورد نظر را انتخاب کنید..."
                   handleOnchange={handleSetMainCategories}
                 />
 
@@ -168,7 +173,7 @@ const AddProduct = () => {
                     typeof mainCategories == "object" ? mainCategories : []
                   }
                   name="category_ids"
-                  firstItem="دسته مورد نظر را انتخاب کنبد..."
+                  firstItem="دسته مورد نظر را انتخاب کنید..."
                   resultType="string"
                   initialItems={selectedCategories}
                 />
@@ -208,7 +213,7 @@ const AddProduct = () => {
                   name="brand_id"
                   firstItem="برند مورد نظر را انتخاب کنبد..."
                 />
-
+                
                 <FormikControl
                   label="رنگ"
                   className="col-md-6 col-lg-8"
@@ -234,7 +239,7 @@ const AddProduct = () => {
                 <FormikControl
                   label="توضیحات"
                   className="col-md-6 col-lg-8"
-                  control="textarea"
+                  control="ckeditor"
                   name="descriptions"
                   placeholder="فقط از حروف واعداد استفاده شود"
                 />
