@@ -6,7 +6,6 @@ import {
 } from "../../services/products";
 import Actions from "./tableAddition/Actions";
 import { Alert, Confirm } from "../../utils/alerts";
-import { Link } from "react-router-dom";
 import AddButtonLink from "../../components/form/AddButtonLink";
 
 const TableProduct = () => {
@@ -22,7 +21,7 @@ const TableProduct = () => {
     {
       field: null,
       title: "گروه محصول",
-      elements: (rowData) => rowData.categories[0].title,
+      elements: (rowData) => rowData.categories[0]?.title,
     },
     { field: "title", title: "عنوان" },
     { field: "price", title: "قیمت" },
