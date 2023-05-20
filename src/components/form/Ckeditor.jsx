@@ -8,7 +8,6 @@ const Ckeditor = ({ name, label, className, placeholder }) => {
   return (
     <Field>
       {({ form }) => {
-        console.log(form);
         return (
           <div className={`col-12 ${className} mb-3`}>
             <CKEditor

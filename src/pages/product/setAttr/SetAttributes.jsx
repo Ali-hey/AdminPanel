@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import SubmitButton from "../../../components/form/SubmitButton";
 import PrevPageButton from "../../../components/PrevPageButton";
-import { getCategoryAttrsService } from "../../../services/categoryAttr";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import SpinnerLoad from "../../../components/SpinnerLoad";
-import * as Yup from "yup";
-import { onSubmit } from "./core";
+import { initializingData, onSubmit } from "./core";
 import FormikError from "../../../components/form/FormikError";
+import * as Yup from "yup";
 
 const SetAttribute = () => {
   const location = useLocation();
@@ -17,41 +16,13 @@ const SetAttribute = () => {
   const [initialValues, setInitialValues] = useState(null);
   const [validationSchema, setValidationSchema] = useState({});
 
-  const handleGetAttributes = async (cat) => {
-    let attrsVar = [];
-    let initials = {};
-    let rules = {};
-
-    Promise.all(
-      selectedProduct.categories.map(async (cat) => {
-        const res = await getCategoryAttrsService(cat.id);
-        if (res.status === 200) {
-          attrsVar = [
-            ...attrsVar,
-            { groupTitle: cat.title, data: res.data.data },
-          ];
-
-          if (res.data.data.length > 0) {
-            for (const d of res.data.data) {
-              initials = { ...initials, [d.id]: "" };
-              rules = {
-                ...rules,
-                [d.id]: Yup.string().matches(
-                  /^[\u0600-\u06FF\sa-zA-Z0-9@!%-.$?&]+$/,
-                  "فقط از حروف و اعداد استفاده شود"
-                ),
-              };
-            }
-          }
-        }
-      })
-    ).then(() => {
-      setAttr(attrsVar);
-      setInitialValues(Object.keys(initials).length > 0 ? initials : {});
-      setValidationSchema(
-        Object.keys(initials).length > 0 ? Yup.object(rules) : {}
-      );
-    });
+  const handleGetAttributes = async () => {
+    const { attrsVar, initials, rules } = await initializingData(
+      selectedProduct
+    );
+    setAttr(attrsVar);
+    setInitialValues(initials);
+    setValidationSchema(Object.keys(initials).length > 0 ? Yup.object(rules) : {}) 
   };
 
   useEffect(() => {
@@ -71,7 +42,9 @@ const SetAttribute = () => {
         {initialValues ? (
           <Formik
             initialValues={initialValues}
-            onSubmit={(values, actions) => onSubmit(values, actions,selectedProduct.id)}
+            onSubmit={(values, actions) =>
+              onSubmit(values, actions, selectedProduct.id)
+            }
             validationSchema={validationSchema}
           >
             <Form>
@@ -102,7 +75,10 @@ const SetAttribute = () => {
                             {attrData.title}
                           </span>
                         </div>
-                        <ErrorMessage name={attrData.id} component={FormikError}/>
+                        <ErrorMessage
+                          name={attrData.id}
+                          component={FormikError}
+                        />
                       </div>
                     ))
                   ) : (
